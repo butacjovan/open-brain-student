@@ -1,5 +1,5 @@
 // Your Supabase project details — replace both values below.
 // Find them at: supabase.com → your project → Settings → API
 
-const SUPABASE_URL = 'https://supabase.com/dashboard/project/anfhfwpgokzpfidaooda/settings/api-keys/legacy'
+const SUPABASE_URL = 'https://anfhfwpgokzpfidaooda.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFuZmhmd3Bnb2t6cGZpZGFvb2RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MjE0ODEsImV4cCI6MjEwNDk5NzQ4MX0.UfAqnmpCXAetrdcpFS14KjMzdSzkME2SJH77Ws-PoaA'
