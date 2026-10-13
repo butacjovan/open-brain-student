@@ -237,7 +237,7 @@
 
 <script>
 // ---------- Supabase setup ----------
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let currentUser = null;
 
 // ---------- Entity decoding ----------
@@ -279,7 +279,7 @@ async function checkConnection() {
   const dot = document.getElementById('statusDot');
   const text = document.getElementById('statusText');
   try {
-    const { error } = await supabase.from('thoughts').select('id').limit(1);
+    const { error } = await sb.from('thoughts').select('id').limit(1);
     if (error) throw error;
     dot.classList.add('ok');
     text.textContent = 'Connected to your database';
@@ -314,10 +314,10 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
   btn.disabled = true;
   try {
     if (authMode === 'signin') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await sb.auth.signInWithPassword({ email, password });
       if (error) throw error;
     } else {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await sb.auth.signUp({ email, password });
       if (error) throw error;
     }
   } catch (e) {
@@ -329,10 +329,10 @@ document.getElementById('authSubmit').addEventListener('click', async () => {
 });
 
 document.getElementById('signOutBtn').addEventListener('click', async () => {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
 });
 
-supabase.auth.onAuthStateChange((event, session) => {
+sb.auth.onAuthStateChange((event, session) => {
   currentUser = session ? session.user : null;
   if (currentUser) {
     document.getElementById('authScreen').style.display = 'none';
@@ -348,7 +348,7 @@ supabase.auth.onAuthStateChange((event, session) => {
 // ---------- Capture (plain text) ----------
 async function saveThought(content, metadata) {
   if (!currentUser) return null;
-  const { data, error } = await supabase
+  const { data, error } = await sb
     .from('thoughts')
     .insert({ content, user_id: currentUser.id, metadata: metadata || {} })
     .select()
@@ -362,7 +362,7 @@ async function saveSource(thoughtId, sourceText, sourceKind) {
   // should only be logged, never block the capture.
   try {
     const text = sourceText || '';
-    await supabase.from('thought_sources').insert({
+    await sb.from('thought_sources').insert({
       thought_id: thoughtId,
       user_id: currentUser.id,
       source_text: text,
@@ -599,7 +599,7 @@ async function doSearch() {
   if (!query) { resultsEl.innerHTML = ''; return; }
   resultsEl.innerHTML = '<div class="muted">Searching...</div>';
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('thoughts')
       .select('*')
       .ilike('content', `%${query}%`)
@@ -617,7 +617,7 @@ async function loadRecent() {
   const listEl = document.getElementById('recentList');
   listEl.innerHTML = '<div class="muted">Loading...</div>';
   try {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('thoughts')
       .select('*')
       .order('created_at', { ascending: false })
